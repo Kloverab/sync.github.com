@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Gerador de loadstring Lua</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  h1 {
+    margin-bottom: 30px;
+    font-weight: 600;
+    font-size: 2.5rem;
+    text-shadow: 1px 1px 5px rgba(0,0,0,0.3);
+  }
+
+  input[type="text"] {
+    width: 100%;
+    max-width: 500px;
+    padding: 15px 20px;
+    border-radius: 30px;
+    border: none;
+    font-size: 1rem;
+    outline: none;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: box-shadow 0.3s ease;
+  }
+  input[type="text"]:focus {
+    box-shadow: 0 6px 25px rgba(0,0,0,0.35);
+  }
+
+  button {
+    margin-top: 20px;
+    padding: 15px 40px;
+    border-radius: 30px;
+    border: none;
+    background: #ff6a00;
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(255,106,0,0.7);
+    transition: background 0.3s ease;
+  }
+  button:hover {
+    background: #e65c00;
+  }
+
+  #result {
+    margin-top: 30px;
+    background: rgba(255,255,255,0.15);
+    padding: 20px;
+    border-radius: 15px;
+    width: 100%;
+    max-width: 600px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.1rem;
+    word-break: break-all;
+    user-select: all;
+    box-shadow: 0 4px 25px rgba(0,0,0,0.3);
+  }
+
+  #copyBtn {
+    margin-top: 15px;
+    background: #00b894;
+    box-shadow: 0 4px 15px rgba(0,184,148,0.7);
+  }
+  #copyBtn:hover {
+    background: #009f7a;
+  }
+
+  @media (max-width: 600px) {
+    h1 {
+      font-size: 2rem;
+    }
+    input[type="text"] {
+      padding: 12px 15px;
+      font-size: 0.95rem;
+    }
+    button {
+      padding: 12px 30px;
+      font-size: 1rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+<h1>Gerador de <code>loadstring</code> Lua</h1>
+
+<input type="text" id="inputLink" placeholder="Cole seu link aqui (ex: https://exemplo.com/script.lua)" />
+
+<button id="generateBtn">Gerar loadstring</button>
+
+<pre id="result" style="display:none;"></pre>
+<button id="copyBtn" style="display:none;">Copiar código</button>
+
+<script>
+  const inputLink = document.getElementById('inputLink');
+  const generateBtn = document.getElementById('generateBtn');
+  const result = document.getElementById('result');
+  const copyBtn = document.getElementById('copyBtn');
+
+  generateBtn.addEventListener('click', () => {
+    const link = inputLink.value.trim();
+
+    if (!link) {
+      alert('Por favor, cole um link válido!');
+      return;
+    }
+
+    // Escapa aspas simples dentro do link caso tenha (raro, mas para garantir)
+    const safeLink = link.replace(/'/g, "\\'");
+
+    const code = `loadstring('${safeLink}')`;
+
+    result.textContent = code;
+    result.style.display = 'block';
+    copyBtn.style.display = 'inline-block';
+  });
+
+  copyBtn.addEventListener('click', () => {
+    if (result.textContent) {
+      navigator.clipboard.writeText(result.textContent).then(() => {
+        alert('Código copiado!');
+      }, () => {
+        alert('Falha ao copiar código.');
+      });
+    }
+  });
+</script>
+
+</body>
+</html>
